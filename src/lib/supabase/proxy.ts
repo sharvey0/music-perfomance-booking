@@ -35,13 +35,31 @@ export async function updateSession(request: NextRequest) {
 
     const user = data?.claims
 
+    // Not connected
     if (
         !user &&
+        request.nextUrl.pathname != '/' &&
         !request.nextUrl.pathname.startsWith('/login') &&
+        !request.nextUrl.pathname.startsWith('/register') &&
+        !request.nextUrl.pathname.startsWith('/reset-password') &&
         !request.nextUrl.pathname.startsWith('/auth')
     ) {
         const url = request.nextUrl.clone()
         url.pathname = '/login'
+        return NextResponse.redirect(url)
+    }
+
+    // Connected
+    if (
+        user &&
+        (
+            request.nextUrl.pathname.startsWith('/login') ||
+            request.nextUrl.pathname.startsWith('/register') ||
+            request.nextUrl.pathname.startsWith('/reset-password')
+        )
+    ) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/'
         return NextResponse.redirect(url)
     }
 
