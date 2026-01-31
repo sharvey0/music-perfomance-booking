@@ -3,6 +3,7 @@
 import {createClient} from "@/lib/supabase/client";
 import * as React from "react";
 import {FormCard} from "@/components/FormCard";
+import {FormInput} from "@/components/FormInput";
 
 
 export default function ResetPassword() {
@@ -65,28 +66,20 @@ export default function ResetPassword() {
             subtitle="Entrez votre adresse courriel"
         >
             <form onSubmit={onSubmit} className="space-y-4">
-                <div className="mb-8">
-                    <label htmlFor="email" className="text-sm font-medium text-slate-900">
-                        Adresse courriel
-                    </label>
-                    <input
-                        id="email"
-                        name="email"
-                        type="text"
-                        autoComplete="email"
-                        value={form.email}
-                        onChange={onChange}
-                        className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
-                        placeholder="Votre adresse courriel"
-                    />
-                    {errors.email ? (
-                        <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                    ) : null}
-                </div>
+                <FormInput
+                    title="Adresse courriel"
+                    id="email"
+                    type="text"
+                    autoComplete="email"
+                    value={form.email}
+                    placeholder="Votre adresse courriel"
+                    onChange={onChange}
+                    error={errors.email}
+                />
 
                 <button
                     type="submit"
-                    className="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-300 cursor-pointer disabled:bg-slate-500"
+                    className="mt-2 w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-300 cursor-pointer disabled:bg-slate-500"
                     disabled={ isLoading }
                 >
                     Réinitialiser le mot de passe

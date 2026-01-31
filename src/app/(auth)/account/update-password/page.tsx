@@ -35,7 +35,7 @@ export default function UpdatePassword() {
 
             setTimeout(() => {
                 router.push('/dashboard');
-            }, 700);
+            }, 1400);
         }
     }
 
