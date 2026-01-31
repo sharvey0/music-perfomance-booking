@@ -6,5 +6,6 @@ export enum SupabaseErrorMessages {
     over_email_send_rate_limit="Un courriel a déjà été envoyé récemment. Veuillez patienter avant d'en demander un autre. Regardez dans vos courriels indésirables si vous ne le recevez pas.",
     emails_not_corresponding="L'adresse courriel ne correspond pas à l'adresse courriel du compte.",
     same_password="Le nouveau mot de passe ne peut pas être le même que l'ancien.",
+    otp_expired="Le lien du courriel n'est pas valide ou a expiré.Veuillez réessayer.",
     default = "Une erreur est survenue"
 }

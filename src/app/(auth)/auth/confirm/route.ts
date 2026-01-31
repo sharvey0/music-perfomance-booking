@@ -23,8 +23,10 @@ export async function GET(req: NextRequest) {
         if (!error) {
             return NextResponse.redirect(redirectTo);
         }
+
+        redirectTo.pathname = '/auth/auth-code-error';
+        redirectTo.searchParams.set('error', error.code!);
     }
 
-    redirectTo.pathname = '/auth/auth-code-error';
     return NextResponse.redirect(redirectTo);
 }

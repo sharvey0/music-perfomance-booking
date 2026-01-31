@@ -4,6 +4,7 @@ import {createClient} from "@/lib/supabase/client";
 import * as React from "react";
 import {FormCard} from "@/components/FormCard";
 import {FormInput} from "@/components/FormInput";
+import Link from "next/link";
 
 
 export default function ResetPassword() {
@@ -87,9 +88,9 @@ export default function ResetPassword() {
 
                 <p className="text-center text-sm text-slate-600">
                     Vous avez déjà un compte ?{" "}
-                    <a href="/login" className="font-medium text-slate-900 underline underline-offset-4">
+                    <Link href="/login" className="font-medium text-slate-900 underline underline-offset-4">
                         Se connecter
-                    </a>
+                    </Link>
                 </p>
             </form>
         </FormCard>
