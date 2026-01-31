@@ -12,14 +12,20 @@ export function FormInput({ title, id, type, autoComplete, value, placeholder, o
     }
 
     return (
-        <div>
+        <div className={isPassword ? "-mb-0.5" : ""}>
             <label htmlFor={id} className="text-sm font-medium text-slate-900">
                 {title}
             </label>
             <input
                 id={id}
                 name={id}
-                type={type}
+                type={
+                    isPassword ?
+                        isPasswordVisible?
+                            "text" : "password"
+                        :
+                        type
+                }
                 autoComplete={autoComplete}
                 value={value}
                 onChange={onChange}

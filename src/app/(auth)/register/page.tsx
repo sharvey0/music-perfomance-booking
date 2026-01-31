@@ -3,6 +3,7 @@
 import React from "react";
 import {createClient} from "@/lib/supabase/client";
 import {FormCard} from "@/components/FormCard";
+import {FormInput} from "@/components/FormInput";
 
 export default function RegisterPage() {
     const [form, setForm] = React.useState({
@@ -85,109 +86,66 @@ export default function RegisterPage() {
             subtitle="Inscrivez-vous pour commencer."
         >
             <form onSubmit={onSubmit} className="space-y-4">
-                <div>
-                    <label htmlFor="firstName" className="text-sm font-medium text-slate-900">
-                        Prénom
-                    </label>
-                    <input
-                        id="firstName"
-                        name="firstName"
-                        type="text"
-                        autoComplete="first-name"
-                        value={form.firstName}
-                        onChange={onChange}
-                        className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
-                        placeholder="Votre prénom"
-                    />
-                    {errors.firstName ? (
-                        <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
-                    ) : null}
-                </div>
+                <FormInput
+                    title="Prénom"
+                    id="firstName"
+                    type="text"
+                    autoComplete="first-name"
+                    value={form.firstName}
+                    placeholder="Votre prénom"
+                    onChange={onChange}
+                    error={errors.firstName}
+                />
 
-                <div>
-                    <label htmlFor="lastName" className="text-sm font-medium text-slate-900">
-                        Nom
-                    </label>
-                    <input
-                        id="lastName"
-                        name="lastName"
-                        type="text"
-                        autoComplete="last-name"
-                        value={form.lastName}
-                        onChange={onChange}
-                        className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
-                        placeholder="Votre nom"
-                    />
-                    {errors.lastName ? (
-                        <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
-                    ) : null}
-                </div>
+                <FormInput
+                    title="Nom"
+                    id="lastName"
+                    type="text"
+                    autoComplete="last-name"
+                    value={form.lastName}
+                    placeholder="Votre nom"
+                    onChange={onChange}
+                    error={errors.lastName}
+                />
 
-                <div>
-                    <label htmlFor="email" className="text-sm font-medium text-slate-900">
-                        Courriel
-                    </label>
-                    <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        value={form.email}
-                        onChange={onChange}
-                        className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
-                        placeholder="joe@entreprise.com"
-                    />
-                    {errors.email ? (
-                        <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                    ) : null}
-                </div>
+                <FormInput
+                    title="Courriel"
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    value={form.email}
+                    placeholder="joe@entreprise.com"
+                    onChange={onChange}
+                    error={errors.email}
+                />
 
-                <div>
-                    <label htmlFor="password" className="text-sm font-medium text-slate-900">
-                        Mot de passe
-                    </label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        autoComplete="new-password"
-                        value={form.password}
-                        onChange={onChange}
-                        className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
-                        placeholder="••••••••"
-                    />
-                    {errors.password ? (
-                        <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-                    ) : (
-                        <p className="mt-1 text-xs text-slate-500">Utilisez au moins 8 caractères.</p>
-                    )}
-                </div>
+                <FormInput
+                    title="Mot de passe"
+                    id="password"
+                    type="password"
+                    autoComplete="new-password"
+                    value={form.password}
+                    placeholder="Mot de passe"
+                    onChange={onChange}
+                    error={errors.password}
+                    isPassword={true}
+                />
 
-                <div className="mb-7">
-                    <label
-                        htmlFor="confirmPassword"
-                        className="text-sm font-medium text-slate-900"
-                    >
-                        Confirmez le mot de passe
-                    </label>
-                    <input
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        type="password"
-                        autoComplete="new-password"
-                        value={form.confirmPassword}
-                        onChange={onChange}
-                        className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
-                        placeholder="••••••••"
-                    />
-                    {errors.confirmPassword ? (
-                        <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
-                    ) : null}
-                </div>
+                <FormInput
+                    title="Confirmez le mot de passe"
+                    id="confirmPassword"
+                    type="confirmPassword"
+                    autoComplete="new-password"
+                    value={form.confirmPassword}
+                    placeholder="Confirmation du mot de passe"
+                    onChange={onChange}
+                    error={errors.confirmPassword}
+                    isPassword={true}
+                />
 
                 <button
                     type="submit"
-                    className="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-300 cursor-pointer disabled:bg-slate-500"
+                    className="mt-2 w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-300 cursor-pointer disabled:bg-slate-500"
                     disabled={ isLoading }
                 >
                     Créer un compte

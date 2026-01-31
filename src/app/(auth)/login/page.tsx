@@ -90,7 +90,7 @@ export default function LoginPage() {
                     isPassword={true}
                 />
 
-                <p className="text-xs text-slate-600 -mt-1 cursor-pointer">
+                <p className="text-xs text-slate-600 mt-3 cursor-pointer">
                     <Link href='/reset-password' className="font-medium text-slate-900 underline underline-offset-4">
                         Réinitialiser le mot de passe
                     </Link>
