@@ -5,6 +5,8 @@ import { FormCard } from "@/components/FormCard";
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import {Eye, EyeOff} from 'geist-icons';
+import Link from "next/link";
 
 const supabase = createClient();
 
@@ -15,10 +17,11 @@ export default function LoginPage() {
     });
     const [errors, setErrors] = React.useState<Record<string, string>>({});
     const [isLoading, setIsLoading] = React.useState(false);
+    const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
     const router = useRouter();
 
-    function toResetPassword() {
-        router.push("/reset-password");
+    function changePasswordVisibility() {
+        setIsPasswordVisible((prev) => !prev);
     }
 
     function validate() {
@@ -91,21 +94,30 @@ export default function LoginPage() {
                     <label htmlFor="password" className="text-sm font-medium text-slate-900">
                         Mot de passe
                     </label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        autoComplete="password"
-                        value={form.password}
-                        onChange={onChange}
-                        className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
-                        placeholder="••••••••"
-                    />
+
+                    <div>
+                        <input
+                            id="password"
+                            name="password"
+                            type={ isPasswordVisible ? "text" : "password" }
+                            autoComplete="password"
+                            value={form.password}
+                            onChange={onChange}
+                            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
+                            placeholder="Mot de passe"
+                        />
+
+                        { isPasswordVisible ?
+                            <EyeOff className="relative top-[-30] left-90 cursor-pointer text-slate-900" onClick={changePasswordVisibility} /> :
+                            <Eye className="relative top-[-30] left-90 cursor-pointer text-slate-900" onClick={changePasswordVisibility} />
+                        }
+
+                    </div>
 
                     <p className="text-xs text-slate-600 mt-1 cursor-pointer">
-                        <a onClick={toResetPassword} className="font-medium text-slate-900 underline underline-offset-4">
+                        <Link href='/reset-password' className="font-medium text-slate-900 underline underline-offset-4">
                             Réinitialiser le mot de passe
-                        </a>
+                        </Link>
                     </p>
 
                     {errors.password ? (
