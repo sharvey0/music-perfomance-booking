@@ -21,7 +21,19 @@ export async function GET(req: NextRequest) {
         });
 
         if (!error) {
-            return NextResponse.redirect(redirectTo);
+            const res = NextResponse.redirect(redirectTo);
+
+            if (type === "recovery") {
+                res.cookies.set("needs_password_update", "1", {
+                    httpOnly: true,
+                    sameSite: "lax",
+                    secure: true,
+                    path: "/",
+                    maxAge: 60 * 15,
+                });
+            }
+
+            return res;
         }
 
         redirectTo.pathname = '/auth/auth-code-error';

@@ -34,30 +34,33 @@ export async function updateSession(request: NextRequest) {
     const { data } = await supabase.auth.getClaims()
 
     const user = data?.claims
+    const pathname = request.nextUrl.pathname
 
-    // Not connected
-    if (
-        !user &&
-        request.nextUrl.pathname != '/' &&
-        !request.nextUrl.pathname.startsWith('/login') &&
-        !request.nextUrl.pathname.startsWith('/register') &&
-        !request.nextUrl.pathname.startsWith('/reset-password') &&
-        !request.nextUrl.pathname.startsWith('/auth')
-    ) {
+    const isAllowedWhenNotConnected =
+        pathname == '/' ||
+        pathname.startsWith('/login') ||
+        pathname.startsWith('/register') ||
+        pathname.startsWith('/reset-password') ||
+        pathname.startsWith('/auth')
+
+    console.log("user:" + user)
+    console.log("notconnected:" + isAllowedWhenNotConnected)
+
+    if (!user && !isAllowedWhenNotConnected) {
         const url = request.nextUrl.clone()
         url.pathname = '/login'
         return NextResponse.redirect(url)
     }
 
+    const isAllowedWhenConnected =
+        !pathname.startsWith('/login') &&
+        !pathname.startsWith('/register') &&
+        !pathname.startsWith('/reset-password')
+
+    console.log("connected:" + isAllowedWhenConnected)
+
     // Connected
-    if (
-        user &&
-        (
-            request.nextUrl.pathname.startsWith('/login') ||
-            request.nextUrl.pathname.startsWith('/register') ||
-            request.nextUrl.pathname.startsWith('/reset-password')
-        )
-    ) {
+    if (user && !isAllowedWhenConnected) {
         const url = request.nextUrl.clone()
         url.pathname = '/'
         return NextResponse.redirect(url)
