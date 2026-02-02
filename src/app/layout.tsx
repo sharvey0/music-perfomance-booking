@@ -15,12 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body>
+      <body className="bg-gradient-to-b from-blue-100 to-white min-h-screen">
         <div className="site-root">
 
           <Header />
 
-          <main className="site-main">{children}</main>
+          <main className="h-200">{children}</main>
 
           <Footer />
         </div>
