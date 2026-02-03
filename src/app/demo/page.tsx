@@ -1,41 +1,54 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from "react";
 import {createClient} from "@/lib/supabase/client";
 import { Header } from "@/components/Header";
 
+type FileObject = {
+    name: string;
+    url: string;
+};
+
 export default function Demo() {
-    const [files, setFiles] = useState<any[] | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [files, setFiles] = useState<FileObject[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        let mounted = true;
-        
-        async function loadFiles() {
+        async function loadAllAudioFiles() {
             const supabase = createClient();
-            const { data, error } = await supabase
+            const { data: folders, error: folderError } = await supabase
                 .storage
                 .from('demo-bucket')
-                .list('');
+                .list(''); 
 
-            if (!mounted) return;
-
-            if (error) {
-                console.error('Error listing files:', error.message);
-                setFiles([]);
-                setLoading(false);
+            if (folderError) {
+                console.error('Folder error:', folderError);
                 return;
             }
 
-            setFiles(data ?? []);
-            setLoading(false);
+            const allFiles = await Promise.all(folders.map(async (folder) => {
+                const { data, error } = await supabase
+                    .storage
+                    .from('demo-bucket')
+                    .list(folder.name + '/audio'); 
+
+                if (error) {
+                    console.error(`Error fetching files from ${folder.name}:`, error);
+                    return [];
+                }
+                return data.map(file => ({
+                    ...file,
+                    url: supabase.storage.from('demo-bucket').getPublicUrl(folder.name + '/audio/' + file.name).data.publicUrl
+                }));
+            }));
+
+         
+            const flattenedFiles = allFiles.flat();
+            setFiles(flattenedFiles as FileObject[]);
+            setLoading(false); 
         }
 
-        loadFiles();
-
-        return () => {
-            mounted = false;
-        }
+        loadAllAudioFiles();
     }, [])
 
     return (
@@ -46,8 +59,8 @@ export default function Demo() {
                 {loading && <div>Loading...</div>}
                 {!loading && files && files.length > 0 && (
                     <ul>
-                        {files.map((f: any) => (
-                            <li key={f.name}>{f.name}</li>
+                        {files.map((f: FileObject) => (
+                            <li key={f.name}>{f.name} <audio controls src={f.url} /></li>
                         ))}
                     </ul>
                 )}
