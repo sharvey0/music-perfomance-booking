@@ -1,11 +1,17 @@
-export default function AuthLayout({ children }:  Readonly<{ children: React.ReactNode; }>) {
+import {Header} from "@/components/Header";
+import {ReactNode} from "react";
+
+export default function AuthLayout({ children }:  Readonly<{ children: ReactNode; }>) {
     return (
-        <main className="h-screen flex items-center bg-gradient-to-b from-blue-100 to-white text-black">
-            <div className="mx-auto w-full max-w-md">
-                <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                    { children }
+        <div>
+            <Header showOnlyLogo={true} />
+            <main className="h-screen flex items-center bg-black bg-gradient-to-br from-black via-zinc-950 to-black text-white">
+                <div className="mx-auto w-full max-w-md">
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-md">
+                        { children }
+                    </div>
                 </div>
-            </div>
-        </main>
+            </main>
+        </div>
     );
 }

@@ -124,15 +124,15 @@ export default function UpdatePassword() {
 
                 <button
                     type="submit"
-                    className="mt-2 w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-300 cursor-pointer disabled:bg-slate-500"
+                    className="mt-2 w-full rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-bold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all cursor-pointer disabled:bg-zinc-700 uppercase tracking-widest"
                     disabled={ isLoading }
                 >
                     Changer le mot de passe
                 </button>
 
-                <p className="text-center text-sm text-slate-600">
+                <p className="text-center text-sm text-zinc-400">
                     Vous avez déjà un compte ?{" "}
-                    <a href="/login" className="font-medium text-slate-900 underline underline-offset-4">
+                    <a href="/login" className="font-medium text-white hover:text-[var(--accent)] underline underline-offset-4 transition-colors">
                         Se connecter
                     </a>
                 </p>
