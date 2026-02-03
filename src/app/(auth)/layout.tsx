@@ -1,11 +1,13 @@
 import {Header} from "@/components/Header";
 import {ReactNode} from "react";
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function AuthLayout({ children }:  Readonly<{ children: ReactNode; }>) {
     return (
         <div>
             <Analytics />
+            <SpeedInsights />
             <Header showOnlyLogo={true} />
             <main className="h-screen min-h-160 flex items-center bg-black bg-gradient-to-br from-black via-zinc-950 to-black text-white">
                 <div className="mx-auto w-full max-w-md">
