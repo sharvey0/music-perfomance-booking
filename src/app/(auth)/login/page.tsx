@@ -93,22 +93,22 @@ export default function LoginPage() {
                     isPassword={true}
                 />
 
-                <p className="text-xs text-slate-600 mt-3 cursor-pointer">
-                    <Link href='/reset-password' className="font-medium text-slate-900 underline underline-offset-4">
+                <p className="text-xs text-zinc-400 mt-3 cursor-pointer">
+                    <Link href='/reset-password' className="font-medium text-white hover:text-[var(--accent)] underline underline-offset-4 transition-colors">
                         Réinitialiser le mot de passe
                     </Link>
                 </p>
 
                 <button
                     type="submit"
-                    className="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-300 cursor-pointer disabled:bg-slate-500"
+                    className="w-full rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-bold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all cursor-pointer disabled:bg-zinc-700 uppercase tracking-widest"
                 >
                     Se connecter
                 </button>
 
-                <p className="text-center text-sm text-slate-600">
+                <p className="text-center text-sm text-zinc-400">
                     Vous n&#39;avez pas de compte ?{" "}
-                    <a href="/register" className="font-medium text-slate-900 underline underline-offset-4">
+                    <a href="/register" className="font-medium text-white hover:text-[var(--accent)] underline underline-offset-4 transition-colors">
                         S&#39;inscrire
                     </a>
                 </p>

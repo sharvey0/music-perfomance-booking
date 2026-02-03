@@ -12,34 +12,39 @@ export function FormInput({ title, id, type, autoComplete, value, placeholder, o
     }
 
     return (
-        <div className={isPassword ? "-mb-0.5" : ""}>
-            <label htmlFor={id} className="text-sm font-medium text-slate-900">
+        <div className={isPassword ? "relative" : ""}>
+            <label htmlFor={id} className="text-sm font-medium text-white">
                 {title}
             </label>
-            <input
-                id={id}
-                name={id}
-                type={
-                    isPassword ?
-                        isPasswordVisible ? "text" : "password"
-                        : type
-                }
-                autoComplete={autoComplete}
-                value={value}
-                onChange={onChange}
-                className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
-                placeholder={placeholder}
-            />
+            <div className="relative mt-1">
+                <input
+                    id={id}
+                    name={id}
+                    type={
+                        isPassword ?
+                            isPasswordVisible ? "text" : "password"
+                            : type
+                    }
+                    autoComplete={autoComplete}
+                    value={value}
+                    onChange={onChange}
+                    className="w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
+                    placeholder={placeholder}
+                />
 
-            { isPassword ?
-                isPasswordVisible ?
-                    <EyeOff className="relative -top-7.5 left-90 cursor-pointer text-slate-900" onClick={changePasswordVisibility} /> :
-                    <Eye className="relative -top-7.5  left-90 cursor-pointer text-slate-900" onClick={changePasswordVisibility} />
-                : null
-            }
+                { isPassword ?
+                    <div
+                        className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-zinc-400 hover:text-white transition-colors"
+                        onClick={changePasswordVisibility}
+                    >
+                        {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </div>
+                    : null
+                }
+            </div>
 
             {error ? (
-                <p className={"text-sm text-red-600 " + (isPassword ? "-mt-4 mb-4.5" : "mt-1")}>{error}</p>
+                <p className="mt-1 text-sm text-red-600">{error}</p>
             ) : null}
         </div>
 
