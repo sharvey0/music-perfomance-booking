@@ -7,10 +7,19 @@ import {useRouter, useSearchParams} from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import {FormInput} from "@/components/FormInput";
+import {Suspense} from "react";
 
 const supabase = createClient();
 
 export default function LoginPage() {
+    return (
+        <Suspense fallback={null}>
+            <LoginPageContent />
+        </Suspense>
+    );
+}
+
+export function LoginPageContent() {
     const [form, setForm] = React.useState({
         email: "",
         password: ""
