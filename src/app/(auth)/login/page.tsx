@@ -58,8 +58,8 @@ export function LoginPageContent() {
         setIsLoading(false);
 
         if (!error) {
-            router.push(next ? next : "/");
             router.refresh();
+            router.push(next ? next : "/");
         } else {
             setErrors(prevState => ({ ...prevState, "api": error.code! }));
         }
