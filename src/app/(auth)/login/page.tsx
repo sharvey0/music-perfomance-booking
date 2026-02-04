@@ -3,7 +3,7 @@
 import { FormCard } from "@/components/FormCard";
 
 import * as React from "react";
-import {useRouter, useSearchParams} from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import {FormInput} from "@/components/FormInput";
@@ -27,7 +27,6 @@ export function LoginPageContent() {
     const [errors, setErrors] = React.useState<Record<string, string>>({});
     const [isLoading, setIsLoading] = React.useState(false);
 
-    const router = useRouter();
     const searchParams = useSearchParams();
 
     function validate() {
@@ -58,7 +57,7 @@ export function LoginPageContent() {
         setIsLoading(false);
 
         if (!error) {
-            router.replace(next ? next : "/", );
+            window.location.href = next ? next : "/";
         } else {
             setErrors(prevState => ({ ...prevState, "api": error.code! }));
         }
