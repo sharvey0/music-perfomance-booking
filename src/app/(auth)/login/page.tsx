@@ -59,6 +59,7 @@ export function LoginPageContent() {
 
         if (!error) {
             router.push(next ? next : "/");
+            router.refresh();
         } else {
             setErrors(prevState => ({ ...prevState, "api": error.code! }));
         }
