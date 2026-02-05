@@ -22,7 +22,7 @@ export function Header({ showOnlyLogo = false }: HeaderProps) {
 
             {!showOnlyLogo &&
                 <div className="flex flex-col lg:flex-row items-center">
-                    <nav className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 lg:gap-x-10 lg:absolute lg:left-1/2 lg:-translate-x-1/2 transform-gpu">
+                    <nav className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 lg:gap-x-10 lg:absolute lg:left-1/2 lg:-translate-x-1/2">
                         <Link href="/" className="text-white hover:text-[var(--accent)] font-semibold transition-colors uppercase text-[10px] lg:text-xs tracking-[0.2em]">Accueil</Link>
                         <Link href="/book" className="text-white hover:text-[var(--accent)] font-semibold transition-colors uppercase text-[10px] lg:text-xs tracking-[0.2em]">Réservez</Link>
                         <Link href="/contact" className="text-white hover:text-[var(--accent)] font-semibold transition-colors uppercase text-[10px] lg:text-xs tracking-[0.2em]">Nous-contacter</Link>
