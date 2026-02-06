@@ -3,13 +3,11 @@
 import {useEffect, useState} from "react";
 import Image from "next/image";
 import { Header } from "@/components/Header";
-import { FileObject } from "@/types/FileObject";
+import { DemoObject } from "@/types/DemoObject";
 import {loadAllDemoAudioFiles} from "@/lib/supabase/bucket";
-import {getDemoAudioFileName, getDemoCategory, getDemoImgFileName} from "@/lib/supabase/utils";
-import {DemoAudioCategory} from "@/enums/supabase/DemoAudioCategory";
 
 export default function Demo() {
-    const [files, setFiles] = useState<FileObject[] | undefined>();
+    const [files, setFiles] = useState<DemoObject[] | undefined>();
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -44,13 +42,13 @@ export default function Demo() {
                                 <h1 className="text-5xl">Noël</h1>
                                 <h1 className="text-5xl">Jazz</h1>
                                 <h1 className="text-5xl">Pop</h1>
-                                {files.map((file: FileObject) => (
+                                {files.map((file: DemoObject) => (
                                     <li key={file.name}>
                                         <div className="flex items-center bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                                             <div className="relative w-1/2 h-128 bg-gray-800 flex-shrink-0">
                                                 <Image 
-                                                    src={getDemoImgFileName(getDemoAudioFileName(file.name))}
-                                                    alt={getDemoAudioFileName(file.name)} 
+                                                    src={"/img/" + file.category + ".jpg"}
+                                                    alt={file.name} 
                                                     fill
                                                     priority
                                                     sizes="50vw"
@@ -58,9 +56,9 @@ export default function Demo() {
                                                 />
                                             </div>
                                             <div className="w-1/2 p-6 flex flex-col justify-center gap-4">
-                                                <h3 className="text-xl font-semibold">{getDemoAudioFileName(file.name)}</h3>
+                                                <h3 className="text-xl font-semibold">{file.name}</h3>
                                                 <audio controls className="w-full" src={file.url} />
-                                                <p>{DemoAudioCategory[getDemoCategory(getDemoAudioFileName(file.name))]}</p>
+                                                <p>{file.category}</p>
                                             </div>
                                         </div>
                                     </li>
