@@ -50,7 +50,14 @@ export default function DeleteMyAccountPage() {
             return console.error("Une erreur est survenue lors de l'obtention de l'utilisateur");
         }
 
-        // TODO
+        const res = await fetch("/api/delete-account", { method: "POST" });
+        const body = await res.json();
+
+        if (!res.ok) {
+            console.error(body.error);
+        } else {
+            window.location.href = "/logout";
+        }
 
         setIsLoading(false);
     }
