@@ -4,6 +4,7 @@ import {createClient} from "@/lib/supabase/client";
 import * as React from "react";
 import {FormCard} from "@/components/FormCard";
 import {FormInput} from "@/components/FormInput";
+import Link from "next/link";
 
 const supabase = createClient();
 
@@ -76,7 +77,7 @@ export default function UpdatePassword() {
             successMessage="Votre mot de passe a bien été modifié."
             errors={errors}
             title="Changer le mot de passe"
-            subtitle="Entrez votre adresse courriel"
+            subtitle="Entrez votre nouveau mot de passe"
         >
             <form onSubmit={onSubmit} className="space-y-4">
                 <FormInput
@@ -103,20 +104,20 @@ export default function UpdatePassword() {
                     isPassword={true}
                 />
 
-                <button
-                    type="submit"
-                    className="mt-2 w-full rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-bold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all cursor-pointer disabled:bg-zinc-700 uppercase tracking-widest"
-                    disabled={ isLoading }
-                >
-                    Changer le mot de passe
-                </button>
-
-                <p className="text-center text-sm text-zinc-400">
-                    Vous avez déjà un compte ?{" "}
-                    <a href="/login" className="font-medium text-white hover:text-[var(--accent)] underline underline-offset-4 transition-colors">
-                        Se connecter
-                    </a>
-                </p>
+                <div>
+                    <button
+                        type="submit"
+                        className="mt-2 w-full rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-bold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all cursor-pointer disabled:bg-zinc-700 uppercase tracking-widest"
+                        disabled={ isLoading }
+                    >
+                        Changer le mot de passe
+                    </button>
+                    <Link href="/account">
+                        <button className="mt-2 w-full rounded-lg bg-white/10 px-4 py-2.5 text-sm font-bold text-white/80 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all cursor-pointer disabled:bg-zinc-700 uppercase tracking-widest">
+                            Retour
+                        </button>
+                    </Link>
+                </div>
             </form>
         </FormCard>
     );

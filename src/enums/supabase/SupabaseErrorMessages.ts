@@ -7,5 +7,6 @@ export enum SupabaseErrorMessages {
     emails_not_corresponding="L'adresse courriel ne correspond pas à l'adresse courriel du compte.",
     same_password="Le nouveau mot de passe ne peut pas être le même que l'ancien.",
     otp_expired="Le lien du courriel n'est pas valide ou a expiré.Veuillez réessayer.",
+    email_address_invalid="L'adresse courriel que vous avez entré est invalide.",
     default = "Une erreur est survenue"
 }
