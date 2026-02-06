@@ -31,6 +31,8 @@ export function FormCard(
                     </p>
                 </div>
 
+                <hr className="text-neutral-800 mb-5" />
+
                 {isSuccess ? (
                     <div className="bg-green-800 rounded-lg  text-white p-4 mb-4" role="alert">
                         <p>{successMessage}</p>

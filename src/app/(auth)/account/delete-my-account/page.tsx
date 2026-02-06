@@ -62,14 +62,14 @@ export default function DeleteMyAccountPage() {
             subtitle="Cette action est irréversible."
         >
             <div className="flex gap-4">
-                <Link href="/account" className="cursor-pointer px-5 h-full py-2 rounded-lg hover:bg-[var(--accent)] border border-red-900 bg-red-900 transition-all group">
+                <Link href="/account" className="cursor-pointer px-5 h-full py-2 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-all group">
                     Non
                 </Link>
                 <button
                     type="button"
                     onClick={deleteAccount}
                     disabled={!isDeleteEnabled}
-                    className="cursor-pointer px-5 h-full py-2 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-all group disabled:bg-transparent disabled:border-0"
+                    className="cursor-pointer px-5 h-full py-2 rounded-lg bg-red-600/20 border border-red-600 text-red-200 font-semibold hover:bg-[var(--accent)] transition-all group disabled:bg-transparent disabled:border-0"
                 >
                     {remainingSeconds > 0 ? `${remainingSeconds}s` : "Supprimer mon compte"}
                 </button>

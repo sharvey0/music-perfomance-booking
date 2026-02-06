@@ -50,8 +50,9 @@ export default function AccountPage() {
                                     <label className="text-xs uppercase tracking-widest text-neutral-500 font-bold">Nom</label>
                                     <p className="text-lg mt-1">{user.user_metadata.last_name}</p>
                                 </div>
-                                <button className="cursor-pointer px-5 h-full py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all group">Enregistrer</button>
                             </div>
+
+                            <button className="cursor-pointer px-5 h-full py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all group">Enregistrer</button>
 
                             <p className="text-neutral-600 text-xs">Rejoint le {new Date(user.created_at).toLocaleDateString()}</p>
 
