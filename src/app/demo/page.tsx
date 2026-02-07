@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { DemoObject } from "@/types/DemoObject";
 import { loadAllDemoAudioFiles } from "@/lib/supabase/bucket";
 import { getDemoCategoryName } from "@/lib/supabase/utils";
+import { normalize } from "path";
 
 export default function Demo() {
   const [groupedFiles, setGroupedFiles] = useState<
@@ -52,8 +53,10 @@ export default function Demo() {
         {!loading && groupedFiles && Object.keys(groupedFiles).length > 0 && (
           <div>
             {categories.map((category: string) => (
-              <div key={category}>
-                <h2 className="text-6xl font-bold mt-10 mb-4">{getDemoCategoryName(category)}</h2>
+              <section key={category} id={`category-${normalize(getDemoCategoryName(category))}`}>
+                <h2 className="text-6xl font-bold mt-10 mb-4">
+                  {getDemoCategoryName(category)}
+                </h2>
                 <ul className="flex flex-col gap-6">
                   {(groupedFiles[category] || []).map((file: DemoObject) => (
                     <li key={file.name}>
@@ -71,12 +74,23 @@ export default function Demo() {
                         <div className="w-1/2 p-6 flex flex-col justify-center gap-4">
                           <h3 className="text-xl font-semibold">{file.name}</h3>
                           <audio controls className="w-full" src={file.url} />
+                          <p className="text-sm text-gray-400">
+                            Dernière mise à jour :{" "}
+                            {new Date(file.created_at).toLocaleDateString(
+                              "fr-FR",
+                              {
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                              },
+                            )}
+                          </p>
                         </div>
                       </div>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </section>
             ))}
           </div>
         )}

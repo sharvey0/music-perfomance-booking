@@ -21,7 +21,8 @@ export async function loadAllDemoAudioFiles() {
     const result: DemoObject[] = (files ?? []).map((file) => ({
         name: getDemoAudioFileName(file.name),
         url: bucketPublicURL + file.name,
-        category: DemoAudioCategoryMap[file.name as DemoAudioCategory]
+        category: DemoAudioCategoryMap[file.name as DemoAudioCategory],
+        created_at: file.created_at
     }));
     return result
 }
