@@ -23,7 +23,7 @@ export default function Home() {
              setDemo({
                 name: data ? data[0].audio_name : "Inconnue",
                 lastUpdate: data
-                    ? new Date(data[0].created_at).toLocaleDateString("fr-FR", {
+                    ? new Date(data[0].created_at).toLocaleDateString("fr-CA", {
                         day: "2-digit",
                         month: "long",
                         year: "numeric",
@@ -75,10 +75,20 @@ export default function Home() {
                               className="grayscale hover:grayscale-0 transition duration-500"
                           />
                       </div>
-                      <div>
-                          <h3 className="text-xl md:text-3xl font-bold tracking-wide">{ loading ? "Chargement..." : `Dernière démo - ${getDemoAudioFileName(demo.name)}` }</h3>
-                          <p className="text-gray-400 text-xs md:text-sm mt-1 uppercase tracking-widest">{ loading ? "Chargement..." : demo.lastUpdate }</p>
-                      </div>
+                      {
+                          loading ?
+                                  <div>
+                                      <div className="h-2.5 bg-neutral-600 rounded-full w-48 mb-4 animate-pulse"></div>
+                                      <div className="h-2 bg-neutral-600 rounded-full w-40 animate-pulse"></div>
+                                  </div>
+                              :
+                              (
+                                  <div>
+                                      <h3 className="text-xl md:text-3xl font-bold tracking-wide">Dernière démo - {getDemoAudioFileName(demo.name)}</h3>
+                                      <p className="text-gray-400 text-xs md:text-sm mt-1 uppercase tracking-widest">{demo.lastUpdate}</p>
+                                  </div>
+                              )
+                      }
                   </div>
 
                   <div className="w-auto">
