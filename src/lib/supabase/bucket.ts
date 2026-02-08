@@ -21,7 +21,25 @@ export async function loadAllDemoAudioFiles() {
     const result: DemoObject[] = (files ?? []).map((file) => ({
         name: getDemoAudioFileName(file.name),
         url: bucketPublicURL + file.name,
-        category: DemoAudioCategoryMap[file.name as DemoAudioCategory]
+        category: DemoAudioCategoryMap[file.name as DemoAudioCategory],
+        created_at: file.created_at
     }));
     return result
+}
+
+export async function getLastDemoUpdate() {
+    const supabase = createClient();
+
+    const { data: data, error: bucketError } = await supabase
+        .from('demos')
+        .select('*')
+        .order('created_at', {  ascending: false })
+        .limit(1);
+
+    if (bucketError) {
+        console.error('File error: ', bucketError);
+        return;
+    }
+    console.log(data);
+    return data;
 }

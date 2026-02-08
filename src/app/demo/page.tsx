@@ -124,45 +124,47 @@ export default function Demo() {
                                     <div className="flex-1 h-px bg-white/10"></div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    {(groupedFiles[category] || []).map((file: DemoObject) => (
-                                        <div
-                                            key={file.name}
-                                            className="group bg-zinc-900/40 border border-white/5 rounded-xl overflow-hidden hover:border-[var(--accent)]/30 transition-all duration-500"
-                                        >
-                                            <div className="flex flex-col sm:flex-row h-full">
-                                                <div
-                                                    className="relative w-full sm:w-40 h-48 sm:h-full bg-zinc-800 flex-shrink-0 overflow-hidden">
-                                                    <Image
-                                                        src={"/img/" + file.category + ".jpg"}
-                                                        alt={file.name}
-                                                        fill
-                                                        sizes="(max-width: 640px) 100vw, 160px"
-                                                        style={{objectFit: "cover"}}
-                                                        className="grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
-                                                    />
-                                                </div>
-                                                <div className="flex-1 p-6 flex flex-col justify-between gap-6">
-                                                    <div>
-                                                        <p className="text-[var(--accent)] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">Extrait
-                                                            Audio</p>
-                                                        <h3 className="text-xl font-bold text-white group-hover:text-[var(--accent)] transition-colors line-clamp-1">
-                                                            {file.name}
-                                                        </h3>
-                                                    </div>
-                                                    <div className="audio-player-container">
-                                                        <audio controls className="w-full h-10 accent-[var(--accent)]"
-                                                               src={file.url}/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {(groupedFiles[category] || []).map((file: DemoObject) => (
+                    <div 
+                      key={file.name}
+                      className="group bg-zinc-900/40 border border-white/5 rounded-xl overflow-hidden hover:border-[var(--accent)]/30 transition-all duration-500"
+                    >
+                      <div className="flex flex-col sm:flex-row h-full">
+                        <div className="relative w-full sm:w-40 h-48 sm:h-full bg-zinc-800 flex-shrink-0 overflow-hidden">
+                          <Image
+                            src={"/img/" + file.category + ".jpg"}
+                            alt={file.name}
+                            fill
+                            sizes="(max-width: 640px) 100vw, 160px"
+                            style={{ objectFit: "cover" }}
+                            className="grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+                          />
+                        </div>
+                        <div className="flex-1 p-6 flex flex-col justify-between gap-6">
+                          <div>
+                            <p className="text-[var(--accent)] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">Extrait Audio</p>
+                            <h3 className="text-xl font-bold text-white group-hover:text-[var(--accent)] transition-colors line-clamp-1">
+                              {file.name}
+                            </h3>
+                            <p className="text-zinc-400 text-xs mt-1">{new Date(file.created_at).toLocaleDateString("fr-FR", {
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric"
+                            })}</p>
+                          </div>
+                          <div className="audio-player-container">
+                             <audio controls className="w-full h-10 accent-[var(--accent)]" src={file.url} />
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                )}
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
                 {!loading && (!groupedFiles || Object.keys(groupedFiles).length === 0) && (
                     <div className="flex flex-col items-center justify-center py-20 text-zinc-500">
