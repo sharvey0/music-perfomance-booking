@@ -2,6 +2,7 @@ import {createServerClient} from '@supabase/ssr'
 import {type NextRequest, NextResponse} from 'next/server'
 
 export async function updateSession(request: NextRequest) {
+    console.log("Supabase proxy called");
     let supabaseResponse = NextResponse.next({
         request,
     })
@@ -33,8 +34,13 @@ export async function updateSession(request: NextRequest) {
     // with the Supabase client, your users may be randomly logged out.
     const {data} = await supabase.auth.getClaims()
 
+    console.log("claims: " + data);
+
     const user = data?.claims
     const pathname = request.nextUrl.pathname
+
+    console.log("user: " + user);
+    console.log("pathname: " + pathname);
 
     const isAllowedWhenNotConnected =
         pathname == '/' ||
@@ -44,6 +50,8 @@ export async function updateSession(request: NextRequest) {
         pathname.startsWith('/auth') ||
         pathname.startsWith('/demo') ||
         pathname.startsWith('/contact')
+
+    console.log("isAllowedWhenNotConnected: " + isAllowedWhenNotConnected);
 
     if (!user && !isAllowedWhenNotConnected) {
         const url = request.nextUrl.clone()
@@ -56,6 +64,8 @@ export async function updateSession(request: NextRequest) {
         !pathname.startsWith('/login') &&
         !pathname.startsWith('/register') &&
         !pathname.startsWith('/reset-password')
+
+    console.log("isAllowedWhenConnected: " + isAllowedWhenConnected);
 
     if (user && !isAllowedWhenConnected) {
         const url = request.nextUrl.clone()
