@@ -6,7 +6,7 @@ import Link from "next/link";
 import {AboutUs} from "@/components/AboutUs";
 import {Footer} from "@/components/Footer";
 import {useEffect, useState} from "react";
-import {MdPhoto} from "react-icons/md";
+import {MdPause, MdPhoto, MdPlayArrow} from "react-icons/md";
 import {getLastDemo} from "@/database/DemoDAO";
 import {Demo} from "@/types/Demo";
 
@@ -21,6 +21,7 @@ export default function Home() {
     }
     const [demo, setDemo] = useState<Demo>(emptyDemo);
     const [loading, setLoading] = useState<boolean>(true);
+    const [playing, setPlaying] = useState<boolean>(false);
 
     useEffect(() => {
         let cancelled = false;
@@ -46,6 +47,22 @@ export default function Home() {
             cancelled = true;
         };
     }, []);
+
+    function onPlay() {
+        const audioElement = document.querySelector("audio");
+
+        if (audioElement) {
+            if (playing) {
+                audioElement.pause();
+            } else {
+                void audioElement.play();
+            }
+            setPlaying(!playing);
+        } else {
+            window.location.href = "demo";
+        }
+    }
+
     return (
         <div>
             <Header isTransparent/>
@@ -92,17 +109,26 @@ export default function Home() {
                                 </>
                                 :
                                 <>
-                                    <div
-                                        className="relative w-16 h-16 md:w-24 md:h-24 overflow-hidden border-2 border-white/20">
+                                    <button
+                                        onClick={onPlay}
+                                        className="cursor-pointer relative w-16 h-16 md:w-24 md:h-24 overflow-hidden border-2 border-white/20 group/demo">
                                         <Image
-                                            src={demo?.img_url}
+                                            src={demo.img_url}
                                             alt="Dernière démo"
                                             fill
                                             sizes="(max-width: 768px) 64px, 96px"
                                             style={{objectFit: 'cover'}}
-                                            className="grayscale hover:grayscale-0 transition duration-500"
+                                            className="grayscale group-hover/demo:grayscale-0 transition duration-500"
                                         />
-                                    </div>
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            {
+                                                playing ?
+                                                    <MdPause className="group-hover/demo:size-10 transition-all size-8 duration-500" /> :
+                                                    <MdPlayArrow className="group-hover/demo:size-10 transition-all size-8 duration-500" />
+                                            }
+                                        </div>
+                                        <audio className="hidden" src={demo.audio_url}></audio>
+                                    </button>
                                     <div>
                                         <p className="text-[var(--accent)] text-[10px] uppercase tracking-[0.2em] font-bold">Dernière Démo</p>
                                         <h3 className="text-xl md:text-3xl font-bold tracking-wide">{demo.name}</h3>
