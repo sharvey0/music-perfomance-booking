@@ -14,3 +14,20 @@ export async function loadAllDemo() {
 
     return data as Array<Demo>;
 }
+
+export async function getLastDemo() {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+        .from('demos')
+        .select('*')
+        .order('created_at', {  ascending: false })
+        .limit(1);
+
+    if (error || !data) {
+        console.error('Unable to retrieve last demo: ', error);
+        return;
+    }
+
+    return data;
+}

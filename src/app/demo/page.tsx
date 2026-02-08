@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {useEffect, useRef, useState} from "react";
+import {SyntheticEvent, useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {Header} from "@/components/Header";
 import {Footer} from "@/components/Footer";
@@ -79,6 +79,15 @@ export default function Demo() {
             const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
             window.scrollTo({top: y, behavior: 'smooth'});
         }
+    };
+
+    const onPlay = (e: SyntheticEvent<HTMLAudioElement>) => {
+        const audios = document.querySelectorAll('audio');
+        audios.forEach(audio => {
+            if (audio !== e.currentTarget) {
+                audio.pause();
+            }
+        });
     };
 
     return (
@@ -162,7 +171,9 @@ export default function Demo() {
                                                     </div>
                                                     <div className="audio-player-container">
                                                         <audio controls className="w-full h-10 accent-[var(--accent)]"
-                                                               src={file.url}/>
+                                                               src={file.url}
+                                                               onPlay={onPlay}
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>

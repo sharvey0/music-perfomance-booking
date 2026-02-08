@@ -6,8 +6,8 @@ import Link from "next/link";
 import {AboutUs} from "@/components/AboutUs";
 import {Footer} from "@/components/Footer";
 import { useEffect, useState } from "react";
-import { getLastDemoUpdate } from "@/lib/supabase/bucket";
 import {MdPhoto} from "react-icons/md";
+import {getLastDemo} from "@/database/DemoDAO";
 
 
 export default function Home() {
@@ -19,7 +19,7 @@ export default function Home() {
 
            (async () => {
              setLoading(true);
-             const data = await getLastDemoUpdate();
+             const data = await getLastDemo();
              setDemo({
                 name: data ? data[0].file_name : "Inconnue",
                 lastUpdate: data
