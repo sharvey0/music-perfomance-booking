@@ -15,7 +15,7 @@ export function getDemoAudioFileName(filePath: string): string {
         return DemoAudioNames[filePath as keyof typeof DemoAudioNames];
     }
 
-    return filePath.replace('.opus', '');
+    return "a";
 }
 
 export function getDemoCategoryName(category: string): string {

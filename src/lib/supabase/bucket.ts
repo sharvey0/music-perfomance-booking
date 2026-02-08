@@ -41,5 +41,6 @@ export async function getLastDemoUpdate() {
         return;
     }
 
+    console.log(data);
     return data;
 }

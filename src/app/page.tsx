@@ -7,7 +7,6 @@ import {AboutUs} from "@/components/AboutUs";
 import {Footer} from "@/components/Footer";
 import { useEffect, useState } from "react";
 import { getLastDemoUpdate } from "@/lib/supabase/bucket";
-import { getDemoAudioFileName } from "@/lib/supabase/utils";
 import {MdPhoto} from "react-icons/md";
 
 
@@ -22,7 +21,7 @@ export default function Home() {
              setLoading(true);
              const data = await getLastDemoUpdate();
              setDemo({
-                name: data ? data[0].audio_name : "Inconnue",
+                name: data ? data[0].file_name : "Inconnue",
                 lastUpdate: data
                     ? new Date(data[0].created_at).toLocaleDateString("fr-CA", {
                         day: "2-digit",
@@ -93,7 +92,7 @@ export default function Home() {
                                       />
                                   </div>
                                   <div>
-                                  <h3 className="text-xl md:text-3xl font-bold tracking-wide">Dernière démo - {getDemoAudioFileName(demo.name)}</h3>
+                                  <h3 className="text-xl md:text-3xl font-bold tracking-wide">Dernière démo - {demo.name}</h3>
                                       <p className="text-gray-400 text-xs md:text-sm mt-1 uppercase tracking-widest">{demo.lastUpdate}</p>
                                   </div>
                               </>
