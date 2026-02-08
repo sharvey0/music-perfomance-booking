@@ -7,6 +7,7 @@ import {Footer} from "@/components/Footer";
 import {MdEmail, MdLocationOn} from "react-icons/md";
 import {FaInstagram} from "react-icons/fa";
 import Link from "next/link";
+import {Hero} from "@/components/HeroSection";
 
 export default function Contact() {
     const [form, setForm] = useState({
@@ -18,25 +19,25 @@ export default function Contact() {
 
     const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-    function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+    function onChange(e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
         const {name, value} = e.target;
         setForm((prev) => ({...prev, [name]: value}));
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const onSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
         setStatus("sending");
 
-        // Simulate form submission
-        setTimeout(() => {
-            setStatus("sent");
-            setForm({name: "", email: "", subject: "", message: ""});
-        }, 1500);
+        // TODO - LOGIQUE D'ENVOIE DE MESSAGE
+        console.log(form);
+
+        setStatus("error");
     };
 
     return (
         <div className="min-h-screen bg-black text-white">
             <Header/>
+            <Hero title="Contact" subtitle="Une question ? Laissez-nous un message et nous vous répondrons le plus rapidement possible." />
 
             <main className="max-w-7xl mx-auto px-6 py-20">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
@@ -101,11 +102,10 @@ export default function Contact() {
                         </div>
                     </div>
 
-                    {/* Contact Form */}
                     <div className="bg-zinc-900/40 border border-white/5 p-8 md:p-12 rounded-2xl">
                         <h2 className="text-2xl font-bold uppercase tracking-wider mb-8">Envoyez un message</h2>
 
-                        <form onSubmit={handleSubmit} className="space-y-6">
+                        <form onSubmit={onSubmit} className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label htmlFor="name"
@@ -117,7 +117,7 @@ export default function Contact() {
                                         required
                                         value={form.name}
                                         onChange={onChange}
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
+                                        className="mt-2 w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
                                         placeholder="Votre nom"
                                     />
                                 </div>
@@ -131,7 +131,7 @@ export default function Contact() {
                                         required
                                         value={form.email}
                                         onChange={onChange}
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
+                                        className="mt-2 w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
                                         placeholder="votre@email.com"
                                     />
                                 </div>
@@ -147,7 +147,7 @@ export default function Contact() {
                                     required
                                     value={form.subject}
                                     onChange={onChange}
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
+                                    className="mt-2 w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
                                     placeholder="Sujet de votre message"
                                 />
                             </div>
@@ -162,7 +162,7 @@ export default function Contact() {
                                     rows={5}
                                     value={form.message}
                                     onChange={onChange}
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all resize-none"
+                                    className="mt-2 w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all resize-none"
                                     placeholder="Comment pouvons-nous vous aider ?"
                                 />
                             </div>
@@ -186,8 +186,14 @@ export default function Contact() {
                             </button>
 
                             {status === "sent" && (
-                                <p className="text-green-500 text-center text-sm font-medium animate-pulse">
+                                <p className="text-green-500 text-center text-sm font-medium">
                                     Merci ! Votre message a été envoyé avec succès. Nous vous contacterons sous peu.
+                                </p>
+                            )}
+
+                            {status === "error" && (
+                                <p className="text-[var(--accent)] text-center text-sm font-medium">
+                                    Une erreur est survenue. Veuillez réessayer ou nous contacter à l&#39;adresse productionsbeaulieu@gmail.com.
                                 </p>
                             )}
                         </form>
