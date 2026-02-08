@@ -48,7 +48,7 @@ export default function Home() {
     }, []);
     return (
         <div>
-            <Header/>
+            <Header isTransparent/>
             <main className="relative min-h-screen w-full bg-black text-white">
                 <div className="fixed inset-0 z-0">
                     <Image

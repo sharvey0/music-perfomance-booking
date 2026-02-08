@@ -1,3 +1,4 @@
 export type HeaderProps = {
-    showOnlyLogo?: boolean
+    showOnlyLogo?: boolean;
+    isTransparent?: boolean;
 };

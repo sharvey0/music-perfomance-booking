@@ -4,10 +4,13 @@ import {MdEmail, MdPerson} from "react-icons/md";
 import Image from "next/image";
 import {HeaderProps} from "@/types/HeaderProps";
 
-export function Header({showOnlyLogo = false}: HeaderProps) {
+export function Header({showOnlyLogo = false, isTransparent = false}: HeaderProps) {
+    const headerBg = isTransparent ? "bg-transparent" : "bg-black lg:bg-transparent";
+    const headerPosition = isTransparent ? "absolute" : "lg:absolute";
+
     return (
         <header
-            className="absolute top-0 left-0 w-full z-50 flex flex-col lg:flex-row items-center justify-between px-6 lg:px-12 py-4 lg:py-10 bg-transparent gap-4 lg:gap-0">
+            className={`${headerPosition} top-0 left-0 w-full z-50 flex flex-col lg:flex-row items-center justify-between px-6 lg:px-12 py-4 lg:py-10 ${headerBg} gap-4 lg:gap-0`}>
             <Link href="/" className="flex items-center gap-2 cursor-pointer mt-2 lg:mt-0">
                 <Image
                     src="/logo/prod_beaulieu_logo.png"

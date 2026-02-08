@@ -116,7 +116,7 @@ export default function Demo() {
 
             <main className="max-w-7xl mx-auto px-6 py-20 min-h-[40vh]">
                 {loading && (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center">
+                    <div className="w-full h-full flex items-center justify-center">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--accent)]"></div>
                     </div>
                 )}
