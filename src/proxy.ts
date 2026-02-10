@@ -4,8 +4,10 @@ import {createServerClient} from "@supabase/ssr";
 export async function proxy(request: NextRequest) {
     console.log("Supabase proxy called");
     console.log("Cookies present:", request.cookies.getAll().map(c => c.name));
-    let supabaseResponse = NextResponse.next({
-        request,
+    const response = NextResponse.next({
+        request: {
+            headers: request.headers,
+        },
     })
 
     const supabase = createServerClient(
@@ -17,18 +19,8 @@ export async function proxy(request: NextRequest) {
                     return request.cookies.getAll()
                 },
                 setAll(cookiesToSet) {
-                    cookiesToSet.forEach(({name, value}) =>
-                        request.cookies.set(name, value)
-                    )
-                    supabaseResponse = NextResponse.next({
-                        request,
-                    })
                     cookiesToSet.forEach(({name, value, options}) =>
-                        supabaseResponse.cookies.set(name, value, {
-                            ...options,
-                            sameSite: 'lax',
-                            secure: true
-                        })
+                        response.cookies.set(name, value, options)
                     )
                 },
             },
@@ -112,7 +104,7 @@ export async function proxy(request: NextRequest) {
     // If this is not done, you may be causing the browser and server to go out
     // of sync and terminate the user's session prematurely!
 
-    return supabaseResponse
+    return response
 }
 
 export const config = {
