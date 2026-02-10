@@ -3,6 +3,7 @@ import {createServerClient} from "@supabase/ssr";
 
 export async function proxy(request: NextRequest) {
     console.log("Supabase proxy called");
+    console.log("Cookies present:", request.cookies.getAll().map(c => c.name));
     let supabaseResponse = NextResponse.next({
         request,
     })
