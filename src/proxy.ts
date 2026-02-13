@@ -53,7 +53,8 @@ export async function proxy(request: NextRequest) {
         pathname.startsWith('/reset-password') ||
         pathname.startsWith('/auth') ||
         pathname.startsWith('/demo') ||
-        pathname.startsWith('/contact')
+        pathname.startsWith('/contact') ||
+        pathname.startsWith('/book');
 
     console.log("isAllowedWhenNotConnected: " + isAllowedWhenNotConnected);
 
