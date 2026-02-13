@@ -10,22 +10,22 @@ import {JwtPayload} from "@supabase/auth-js/src";
 export default function AccountPage() {
     const [user, setUser] = React.useState<JwtPayload | null>(null);
     const [loading, setLoading] = React.useState(true);
-    const supabase = createClient();
-
-    React.useEffect(() => {
-        async function getUser() {
-            const {data, error} = await supabase.auth.getClaims();
-
-            if (error || !data) {
-                console.log("No claims: " + error);
-            }
-
-            setUser(data!.claims);
-            setLoading(false);
-        }
-
-        getUser();
-    }, [supabase]);
+    // const supabase = createClient();
+    //
+    // React.useEffect(() => {
+    //     async function getUser() {
+    //         const {data, error} = await supabase.auth.getClaims();
+    //
+    //         if (error || !data) {
+    //             console.log("No claims: " + error);
+    //         }
+    //
+    //         setUser(data!.claims);
+    //         setLoading(false);
+    //     }
+    //
+    //     getUser();
+    // }, [supabase]);
 
     return (
         <div
