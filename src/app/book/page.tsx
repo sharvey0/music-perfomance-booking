@@ -5,18 +5,21 @@ import {useState} from "react";
 import {Header} from "@/components/Header";
 import {Footer} from "@/components/Footer";
 import {Hero} from "@/components/HeroSection";
+import {MdArrowDropDown} from "react-icons/md";
 
 export default function Contact() {
     const [form, setForm] = useState({
         name: "",
         email: "",
-        subject: "",
-        message: "",
+        type: "",
+        date: "",
+        duration: "",
+        description: "",
     });
 
     const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-    function onChange(e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
+    function onChange(e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>) {
         const {name, value} = e.target;
         setForm((prev) => ({...prev, [name]: value}));
     }
@@ -34,11 +37,11 @@ export default function Contact() {
     return (
         <div className="min-h-screen bg-black text-white">
             <Header/>
-            <Hero title="Réservez" subtitle="Vous avez une idée d'événement en tête ? Ça nous intéresse !" />
+            <Hero title="Réserver" subtitle="Vous avez une idée d'événement en tête ? Ça nous intéresse !" />
 
             <main className="max-w-7xl mx-auto px-6 py-20">
                 <div className="bg-zinc-900/40 border border-white/5 p-8 md:p-12 rounded-2xl">
-                    <h2 className="text-2xl font-bold uppercase tracking-wider mb-8">Envoyez une réservation</h2>
+                    <h2 className="text-2xl font-bold uppercase tracking-wider mb-8">Réservation</h2>
 
                     <form onSubmit={onSubmit} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -52,7 +55,7 @@ export default function Contact() {
                                     required
                                     value={form.name}
                                     onChange={onChange}
-                                    className="mt-2 w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
+                                    className="mt-2 w-full bg-neutral-900 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
                                     placeholder="Votre nom"
                                 />
                             </div>
@@ -66,39 +69,90 @@ export default function Contact() {
                                     required
                                     value={form.email}
                                     onChange={onChange}
-                                    className="mt-2 w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
+                                    className="mt-2 w-full bg-neutral-900 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
                                     placeholder="votre@email.com"
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label htmlFor="subject"
-                                   className="text-xs uppercase tracking-widest font-bold text-zinc-400">Sujet</label>
-                            <input
-                                type="text"
-                                id="subject"
-                                name="subject"
-                                required
-                                value={form.subject}
-                                onChange={onChange}
-                                className="mt-2 w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
-                                placeholder="Sujet de votre message"
-                            />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <label htmlFor="date"
+                                       className="text-xs uppercase tracking-widest font-bold text-zinc-400">Date</label>
+                                <input
+                                    type="date"
+                                    id="date"
+                                    name="date"
+                                    required
+                                    value={form.date}
+                                    onChange={onChange}
+                                    className="appearance-none mt-2 w-full bg-neutral-900 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label htmlFor="duration"
+                                       className="text-xs uppercase tracking-widest font-bold text-zinc-400">Durée approximative (h)</label>
+                                <input
+                                    type="number"
+                                    id="duration"
+                                    name="duration"
+                                    required
+                                    value={form.duration}
+                                    onChange={onChange}
+                                    className="[appearance:textfield] mt-2 w-full bg-neutral-900 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
+                                    placeholder="3"
+                                />
+                            </div>
                         </div>
 
                         <div className="space-y-2">
-                            <label htmlFor="message"
-                                   className="text-xs uppercase tracking-widest font-bold text-zinc-400">Message</label>
+                            <label htmlFor="type"
+                                   className="text-xs uppercase tracking-widest font-bold text-zinc-400">Type d&#39;événement</label>
+                            <div className="relative mt-2">
+                                <select
+                                    id="type"
+                                    name="type"
+                                    required
+                                    value={form.type}
+                                    onChange={onChange}
+                                    className="cursor-pointer appearance-none w-full text-white bg-neutral-900 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
+                                >
+                                    <option>Choisir</option>
+                                    <option value="mariage">Mariage</option>
+                                    <option value="vin_dhonneur">Vin d&#39;honneur / Cocktail</option>
+                                    <option value="anniversaire_enfant">Anniversaire (enfant)</option>
+                                    <option value="anniversaire_adulte">Anniversaire (adulte)</option>
+                                    <option value="evenement_corporatif">Événement corporatif</option>
+                                    <option value="lancement_produit">Lancement de produit</option>
+                                    <option value="fete_privee">Fête privée</option>
+                                    <option value="funerailles">Funérailles / Hommage</option>
+                                    <option value="bal_finissant">Bal de finissants</option>
+                                    <option value="spectacle_scolaire">Spectacle scolaire</option>
+                                    <option value="restaurant_bar">Prestation en restaurant / bar</option>
+                                    <option value="hotel">Prestation en hôtel</option>
+                                    <option value="dj_set">DJ set</option>
+                                    <option value="autre">Autre</option>
+                                </select>
+                                <div
+                                    className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4"
+                                >
+                                    <MdArrowDropDown size={32} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label htmlFor="description"
+                                   className="text-xs uppercase tracking-widest font-bold text-zinc-400">Description</label>
                             <textarea
-                                id="message"
-                                name="message"
+                                id="description"
+                                name="description"
                                 required
                                 rows={5}
-                                value={form.message}
+                                value={form.description}
                                 onChange={onChange}
-                                className="mt-2 w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all resize-none"
-                                placeholder="Comment pouvons-nous vous aider ?"
+                                className="mt-2 w-full bg-neutral-900 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all resize-none"
+                                placeholder="Aidez-nous à comprendre votre événement"
                             />
                         </div>
 
@@ -116,7 +170,7 @@ export default function Contact() {
                             ) : status === "sent" ? (
                                 "Message envoyé !"
                             ) : (
-                                "Envoyer le message"
+                                "Envoyer la demande"
                             )}
                         </button>
 

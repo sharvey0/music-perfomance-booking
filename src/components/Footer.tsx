@@ -30,7 +30,7 @@ export function Footer() {
                             <li><Link href="/" className="hover:text-[var(--accent)] transition-colors">Accueil</Link>
                             </li>
                             <li><Link href="/book"
-                                      className="hover:text-[var(--accent)] transition-colors">Réservez</Link></li>
+                                      className="hover:text-[var(--accent)] transition-colors">Réserver</Link></li>
                             <li><Link href="/contact"
                                       className="hover:text-[var(--accent)] transition-colors">Contactez-nous</Link>
                             </li>
