@@ -6,27 +6,28 @@ import {createClient} from "@/lib/supabase/client";
 import Link from "next/link";
 import {MdArrowForward, MdDelete, MdLock, MdLogout, MdMail} from "react-icons/md";
 import {User} from "@supabase/auth-js";
+import {useEffect} from "react";
 
 export default function AccountPage() {
     const [user, setUser] = React.useState<User | null>(null);
     const [loading, setLoading] = React.useState(true);
     const supabase = createClient();
 
-    React.useEffect(() => {
+    useEffect(() => {
         async function getUser() {
-            const {data: { session }, error} = await supabase.auth.getSession();
+            const {data: { user }, error} = await supabase.auth.getUser();
 
-            if (error || !session) {
+            if (error || !user) {
                 console.log("No claims: " + error);
                 return;
             }
 
-            setUser(session.user);
+            setUser(user);
             setLoading(false);
         }
 
         getUser();
-    }, [supabase]);
+    });
 
     return (
         <div
