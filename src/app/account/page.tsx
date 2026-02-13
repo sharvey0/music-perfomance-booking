@@ -11,9 +11,10 @@ import {useEffect} from "react";
 export default function AccountPage() {
     const [user, setUser] = React.useState<User | null>(null);
     const [loading, setLoading] = React.useState(true);
-    const supabase = createClient();
 
     useEffect(() => {
+        const supabase = createClient();
+
         async function getUser() {
             const {data: { user }, error} = await supabase.auth.getUser();
 
