@@ -6,7 +6,8 @@ const supabase = createClient();
 export async function loadAllDemo() {
     const { data, error } = await supabase
         .from("demos")
-        .select();
+        .select()
+        .order('created_at');
 
     if (error || !data) {
         console.log("Unable to retrieve demo files: " + error);

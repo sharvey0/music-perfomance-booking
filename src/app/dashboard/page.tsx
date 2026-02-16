@@ -298,7 +298,7 @@ export default function DashboardPage() {
                                                 <tr key={idx} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                                                     <td className="py-3 px-4">{demo.name}</td>
                                                     <td className="py-3 px-4">
-                                                        {categories.find(c => c.id.toString() === demo.category)?.label || demo.category}
+                                                        {categories.find(c => c.id.toString() == demo.category)?.label || demo.category}
                                                     </td>
                                                     <td className="py-3 px-4 text-sm text-zinc-400">{new Date(demo.created_at).toLocaleDateString()}</td>
                                                     <td className="py-3 px-4 text-right">
