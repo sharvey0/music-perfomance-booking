@@ -31,7 +31,7 @@ export function Header({showOnlyLogo = false, isTransparent = false}: HeaderProp
                         <Link href="/"
                               className="text-white hover:text-[var(--accent)] font-semibold transition-colors uppercase text-[10px] lg:text-xs tracking-[0.2em]">Accueil</Link>
                         <Link href="/book"
-                              className="text-white hover:text-[var(--accent)] font-semibold transition-colors uppercase text-[10px] lg:text-xs tracking-[0.2em]">Réservez</Link>
+                              className="text-white hover:text-[var(--accent)] font-semibold transition-colors uppercase text-[10px] lg:text-xs tracking-[0.2em]">Réserver</Link>
                         <Link href="/contact"
                               className="text-white hover:text-[var(--accent)] font-semibold transition-colors uppercase text-[10px] lg:text-xs tracking-[0.2em]">Nous-contacter</Link>
                         <Link href="/#about-us"

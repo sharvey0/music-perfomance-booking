@@ -18,7 +18,7 @@ export default function AccountPage() {
         async function getUser() {
             const {data: {user}} = await supabase.auth.getUser();
             setUser(user);
-        }
+        };
 
         const loadAdminFlag = async () => {
             const {data: {user}} = await supabase.auth.getUser();
@@ -36,11 +36,16 @@ export default function AccountPage() {
         getUser();
     }, [supabase]);
 
+    async function handleLogout() {
+        await fetch("/logout", { method: 'POST' });
+        window.location.href = '/';
+    }
+
     return (
         <div
-            className="min-h-screen flex items-center justify-center bg-black bg-gradient-to-br from-black via-zinc-950 to-black text-white px-6 py-32 lg:py-0">
-            <Header showOnlyLogo/>
-            <main className="mx-auto max-w-lg w-full flex flex-col justify-center items-center">
+            className="min-h-screen flex flex-col items-center justify-center bg-black bg-gradient-to-br from-black via-zinc-950 to-black text-white px-6 lg:py-0">
+            <Header />
+            <main className="mt-10 mx-auto max-w-lg w-full flex flex-col justify-center items-center">
                 <div
                     className="mx-auto w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-md">
                     <h1 className="text-3xl font-semibold">Votre compte</h1>
@@ -64,12 +69,12 @@ export default function AccountPage() {
                                 <div>
                                     <label
                                         className="text-xs uppercase tracking-widest text-neutral-500 font-bold">Prénom</label>
-                                    <p className="text-lg mt-1">{user.user_metadata.first_name}</p>
+                                    <p className="text-lg mt-1">{user.user_metadata?.first_name}</p>
                                 </div>
                                 <div>
                                     <label
                                         className="text-xs uppercase tracking-widest text-neutral-500 font-bold">Nom</label>
-                                    <p className="text-lg mt-1">{user.user_metadata.last_name}</p>
+                                    <p className="text-lg mt-1">{user.user_metadata?.last_name}</p>
                                 </div>
                             </div>
                             <p className="text-neutral-600 text-xs">Rejoint
@@ -107,13 +112,13 @@ export default function AccountPage() {
                                         className="text-neutral-500 group-hover:translate-x-1 transition-transform font-black"/>
                                 </Link>
 
-                                <Link
-                                    href="/logout"
-                                    className="flex items-center gap-3 w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
+                                <button
+                                    onClick={handleLogout}
+                                    className="cursor-pointer flex items-center gap-3 w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
                                 >
                                     <MdLogout className="text-[var(--accent)] text-xl"/>
                                     <span className="flex-1 font-medium text-left">Se déconnecter</span>
-                                </Link>
+                                </button>
 
                                 <Link
                                     href="/account/delete-my-account"
