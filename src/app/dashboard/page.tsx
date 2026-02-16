@@ -185,7 +185,7 @@ export default function DashboardPage() {
                     <h1 className="text-4xl font-bold">Tableau de bord Admin</h1>
                     <button 
                         onClick={refreshData}
-                        className="p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+                        className="cursor-pointer p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
                         title="Rafraîchir les données"
                     >
                         <MdRefresh size={24} />
@@ -308,14 +308,14 @@ export default function DashboardPage() {
                                                                     setEditingDemo(demo);
                                                                     window.scrollTo({ top: 0, behavior: 'smooth' });
                                                                 }}
-                                                                className="p-2 text-zinc-400 hover:text-white transition-colors"
+                                                                className="cursor-pointer p-2 text-zinc-400 hover:text-white transition-colors"
                                                                 title="Modifier"
                                                             >
                                                                 <MdEdit size={18} />
                                                             </button>
                                                             <button 
                                                                 onClick={() => handleDeleteDemo(demo.id)}
-                                                                className="p-2 text-zinc-400 hover:text-[var(--accent)] transition-colors"
+                                                                className="cursor-pointer p-2 text-zinc-400 hover:text-[var(--accent)] transition-colors"
                                                                 title="Supprimer"
                                                             >
                                                                 <MdDelete size={18} />
@@ -375,20 +375,20 @@ export default function DashboardPage() {
                                     {categories.map((cat) => (
                                         <div key={cat.id} className="p-3 bg-white/5 border border-white/10 rounded-lg flex justify-between items-center group">
                                             <span>{cat.label}</span>
-                                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <div className="flex gap-1 transition-opacity">
                                                 <button 
                                                     onClick={() => {
                                                         setEditingCategory(cat);
                                                         window.scrollTo({ top: 0, behavior: 'smooth' });
                                                     }}
-                                                    className="p-1 text-zinc-400 hover:text-white transition-colors"
+                                                    className="cursor-pointer p-1 text-zinc-400 hover:text-white transition-colors"
                                                     title="Modifier"
                                                 >
                                                     <MdEdit size={16} />
                                                 </button>
                                                 <button 
                                                     onClick={() => handleDeleteCategory(cat.id)}
-                                                    className="p-1 text-zinc-400 hover:text-[var(--accent)] transition-colors"
+                                                    className="cursor-pointer p-1 text-zinc-400 hover:text-[var(--accent)] transition-colors"
                                                     title="Supprimer"
                                                 >
                                                     <MdDelete size={16} />
