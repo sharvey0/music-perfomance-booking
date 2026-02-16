@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
 
         const { error } = await resendClient.emails.send({
             from: 'ProdBeaulieu Contact <contact@contact.prodbeaulieu.com>',
-            to: ['samuelharvey06@gmail.com'],
+            to: ['productionsbeaulieu@gmail.com'],
             template: {
                 id: 'question-notification',
                 variables: {
