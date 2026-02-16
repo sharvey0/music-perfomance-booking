@@ -2,164 +2,413 @@
 
 import {FormCard} from "@/components/FormCard";
 import {FormInput} from "@/components/FormInput";
-import {loadAllCategories} from "@/database/CategoryDAO";
+import {addCategory, deleteCategory, loadAllCategories, updateCategory} from "@/database/CategoryDAO";
+import {addDemo, deleteDemo, loadAllDemo, updateDemo} from "@/database/DemoDAO";
+import {uploadFile} from "@/lib/supabase/storage";
 import {Category} from "@/types/Category";
+import {Demo} from "@/types/Demo";
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import {Header} from "@/components/Header";
+import {Footer} from "@/components/Footer";
+import {MdLibraryMusic, MdRefresh, MdCategory, MdDelete, MdEdit} from "react-icons/md";
 
 export default function DashboardPage() {
-    const [form, setForm] = React.useState({
-        name: "",
-        category: "",
-        file: null as File | null
-    });
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [demos, setDemos] = useState<Demo[]>([]);
+    const [activeTab, setActiveTab] = useState<'demos' | 'categories'>('demos');
 
-    const [categories, setCategories] = React.useState<Array<Category>>([]);
-    const [errors, setErrors] = React.useState<Record<string, string>>({});
-    const [loading, setLoading] = React.useState(false);
-    const [success, setSuccess] = React.useState(false);
+    const [newDemo, setNewDemo] = useState({
+        name: "",
+        category: ""
+    });
+    const [audioFile, setAudioFile] = useState<File | null>(null);
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const [newCategoryLabel, setNewCategoryLabel] = useState("");
+    const [isSubmittingCategory, setIsSubmittingCategory] = useState(false);
+    const [categorySuccessMessage, setCategorySuccessMessage] = useState("");
+
+    const [editingDemo, setEditingDemo] = useState<Demo | null>(null);
+    const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+
+    async function refreshData() {
+        const [cats, dms] = await Promise.all([
+            loadAllCategories(),
+            loadAllDemo()
+        ]);
+        setCategories(cats || []);
+        setDemos(dms || []);
+    }
 
     useEffect(() => {
-            let cancelled = false;
-    
-            (async () => {
-                setLoading(true);
-                setCategories(await loadAllCategories());
-    
-                if (!cancelled) setLoading(false);
-            })();
-    
-            return () => {
-                cancelled = true;
-            };
-        }, []);
-             
+        const fetchData = async () => {
+            await refreshData();
+        };
+        fetchData();
+    }, []);
 
-    function onChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-        const {name, value} = e.target;
-        setForm((prev) => ({...prev, [name]: value}));
-        setErrors((prev) => ({...prev, [name]: ""}));
-    }
-
-    function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const file = e.target.files?.[0] || null;
-        setForm((prev) => ({...prev, file}));
-        setErrors((prev) => ({...prev, file: ""}));
-    }
-
-    function validate() {
-        const errors: Record<string, string> = {};
-
-        if (!form.name.trim()) errors.name = "Le nom est requis.";
-        if (!form.category) errors.category = "La catégorie est requise.";
-        if (!form.file) errors.file = "Le fichier est requis.";
-
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    }
-
-    const onSubmit = async (e: React.SubmitEvent) => {
+    const handleAddDemo = async (e: SubmitEvent) => {
         e.preventDefault();
-        setSuccess(false);
-        if (!validate()) return;
+        if (!audioFile || !imageFile || !newDemo.category || !newDemo.name) {
+            setErrorMessage("Veuillez remplir tous les champs et sélectionner les fichiers.");
+            return;
+        }
 
-        // TODO - AJOUT DANS LA BD
-        console.log(form);
+        setIsSubmitting(true);
+        setErrorMessage("");
 
-        setSuccess(true);
+        try {
+            const { url: audio_url, error: audioError } = await uploadFile(audioFile, 'demos_audio');
+            if (audioError) new Error("Erreur lors de l'upload de l'audio: " + audioError.message);
+
+            // 2. Upload image
+            const { url: img_url, error: imageError } = await uploadFile(imageFile, 'demos_images');
+            if (imageError) new Error("Erreur lors de l'upload de l'image: " + imageError.message);
+
+            // 3. Save to database
+            const { error } = await addDemo({
+                name: newDemo.name,
+                category: newDemo.category,
+                audio_url: audio_url!,
+                img_url: img_url!,
+                created_at: new Date().toISOString()
+            });
+
+            if (error) throw error;
+
+            setSuccessMessage("Démo ajoutée avec succès !");
+            setNewDemo({ name: "", category: "" });
+            setAudioFile(null);
+            setImageFile(null);
+            // Reset file inputs manually if needed, but react state should be enough for logic
+            refreshData();
+            setTimeout(() => setSuccessMessage(""), 3000);
+        } catch (err: unknown) {
+            console.error(err);
+            setErrorMessage(err instanceof Error ? err.message : "Une erreur est survenue lors de l'ajout de la démo.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleAddCategory = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newCategoryLabel.trim()) return;
+        setIsSubmittingCategory(true);
+        const { error } = await addCategory(newCategoryLabel.trim());
+        setIsSubmittingCategory(true);
+        if (!error) {
+            setCategorySuccessMessage("Catégorie ajoutée avec succès !");
+            setNewCategoryLabel("");
+            refreshData();
+            setTimeout(() => setCategorySuccessMessage(""), 3000);
+        }
+    };
+
+    const handleDeleteDemo = async (id: number) => {
+        if (!confirm("Êtes-vous sûr de vouloir supprimer cette démo ?")) return;
+        const { error } = await deleteDemo(id);
+        if (!error) refreshData();
+    };
+
+    const handleDeleteCategory = async (id: number) => {
+        if (!confirm("Êtes-vous sûr de vouloir supprimer cette catégorie ?")) return;
+        const { error } = await deleteCategory(id);
+        if (!error) refreshData();
+    };
+
+    const handleUpdateDemo = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editingDemo) return;
+        
+        setIsSubmitting(true);
+        try {
+            let audio_url = editingDemo.audio_url;
+            let img_url = editingDemo.img_url;
+
+            if (audioFile) {
+                const { url, error } = await uploadFile(audioFile, 'demos_audio');
+                if (error) throw error;
+                audio_url = url!;
+            }
+
+            if (imageFile) {
+                const { url, error } = await uploadFile(imageFile, 'demos_images');
+                if (error) throw error;
+                img_url = url!;
+            }
+
+            const { error } = await updateDemo(editingDemo.id, {
+                name: editingDemo.name,
+                category: editingDemo.category,
+                audio_url,
+                img_url
+            });
+
+            if (error) throw error;
+
+            setSuccessMessage("Démo mise à jour avec succès !");
+            setEditingDemo(null);
+            setAudioFile(null);
+            setImageFile(null);
+            refreshData();
+            setTimeout(() => setSuccessMessage(""), 3000);
+        } catch (err: unknown) {
+            console.error(err);
+            setErrorMessage(err instanceof Error ? err.message : "Une erreur est survenue.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleUpdateCategory = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editingCategory) return;
+        setIsSubmittingCategory(true);
+        const { error } = await updateCategory(editingCategory.id, editingCategory.label);
+        setIsSubmittingCategory(false);
+        if (!error) {
+            setCategorySuccessMessage("Catégorie mise à jour !");
+            setEditingCategory(null);
+            refreshData();
+            setTimeout(() => setCategorySuccessMessage(""), 3000);
+        }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="w-full max-w-md">
-                <FormCard
-                    isLoading={loading}
-                    isSuccess={success}
-                    successMessage="Formulaire soumis avec succès !"
-                    errors={errors}
-                    title="Tableau de bord"
-                    subtitle="Créer une nouvelle entrée de démo"
-                >
-                    <form onSubmit={onSubmit} className="space-y-4">
-                        <FormInput
-                            title="Nom de la démo"
-                            id="name"
-                            type="text"
-                            autoComplete="name"
-                            value={form.name}
-                            placeholder="Entrez le nom de la démo"
-                            onChange={onChange}
-                            error={errors.name}
-                        />
+        <div className="min-h-screen bg-black text-white">
+            <Header />
+            
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 mt-16">
+                <div className="flex justify-between items-center mb-8">
+                    <h1 className="text-4xl font-bold">Tableau de bord Admin</h1>
+                    <button 
+                        onClick={refreshData}
+                        className="p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+                        title="Rafraîchir les données"
+                    >
+                        <MdRefresh size={24} />
+                    </button>
+                </div>
 
-                        <div>
-                            <label htmlFor="category" className="text-sm font-medium text-white">
-                                Catégorie
-                            </label>
-                            <div className="relative mt-1">
-                                <select
-                                    id="category"
-                                    name="category"
-                                    value={form.category}
-                                    onChange={onChange}
-                                    className="w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all appearance-none cursor-pointer"
-                                >
-                                    <option value="" disabled className="bg-zinc-900">
-                                        Sélectionnez une catégorie
-                                    </option>
-                                    {categories.map((category) => (
-                                        <option
-                                            key={category.id}
-                                            value={category.label}
-                                            className="bg-zinc-900"
+                {/* Tabs */}
+                <div className="flex space-x-4 mb-8 border-b border-white/10 overflow-x-auto whitespace-nowrap pb-1">
+                    <button 
+                        onClick={() => setActiveTab('demos')}
+                        className={`pb-4 px-2 flex items-center space-x-2 ${activeTab === 'demos' ? 'border-b-2 border-[var(--accent)] text-[var(--accent)]' : 'text-zinc-400'}`}
+                    >
+                        <MdLibraryMusic /> <span>Démos</span>
+                    </button>
+                    <button 
+                        onClick={() => setActiveTab('categories')}
+                        className={`pb-4 px-2 flex items-center space-x-2 ${activeTab === 'categories' ? 'border-b-2 border-[var(--accent)] text-[var(--accent)]' : 'text-zinc-400'}`}
+                    >
+                        <MdCategory /> <span>Catégories</span>
+                    </button>
+                </div>
+
+                {/* Content */}
+                <div className="grid grid-cols-1 gap-8">
+                    
+                    {activeTab === 'demos' && (
+                        <div className="space-y-8">
+                            <FormCard 
+                                title="Ajouter une nouvelle démo" 
+                                subtitle="Ajouter une nouvelle démo musicale au catalogue"
+                                isLoading={isSubmitting}
+                                isSuccess={!!successMessage}
+                                successMessage={successMessage}
+                                errors={errorMessage ? { api: errorMessage } : undefined}
+                            >
+                                <form onSubmit={editingDemo ? handleUpdateDemo : handleAddDemo} className="space-y-4">
+                                    <FormInput 
+                                        title="Nom de la démo" 
+                                        id="name" 
+                                        value={editingDemo ? editingDemo.name : newDemo.name} 
+                                        onChange={(e) => editingDemo ? setEditingDemo({...editingDemo, name: e.target.value}) : setNewDemo({...newDemo, name: e.target.value})}
+                                        placeholder="ex: Summer Hits 2026"
+                                    />
+                                    <div>
+                                        <label className="text-sm font-medium text-white mb-1 block">Fichier Audio {editingDemo && "(laisser vide pour conserver l'actuel)"}</label>
+                                        <input 
+                                            type="file" 
+                                            accept="audio/*"
+                                            onChange={(e) => setAudioFile(e.target.files?.[0] || null)}
+                                            className="w-full rounded-lg border border-white/20 bg-black px-3 py-2 text-white outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-sm font-medium text-white mb-1 block">Image de Couverture {editingDemo && "(laisser vide pour conserver l'actuel)"}</label>
+                                        <input 
+                                            type="file" 
+                                            accept="image/*"
+                                            onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                                            className="w-full rounded-lg border border-white/20 bg-black px-3 py-2 text-white outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-sm font-medium text-white mb-1 block">Catégorie</label>
+                                        <select 
+                                            value={editingDemo ? editingDemo.category : newDemo.category}
+                                            onChange={(e) => editingDemo ? setEditingDemo({...editingDemo, category: e.target.value}) : setNewDemo({...newDemo, category: e.target.value})}
+                                            className="w-full rounded-lg border border-white/20 bg-black px-3 py-2 text-white outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
                                         >
-                                            {category.label}
-                                        </option>
-                                    ))}
-                                </select>
-                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-400">
-                                    <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                    </svg>
+                                            <option value="">Sélectionnez une catégorie</option>
+                                            {categories.map(cat => (
+                                                <option key={cat.id} value={cat.id.toString()}>{cat.label}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button 
+                                            type="submit"
+                                            disabled={isSubmitting}
+                                            className="flex-1 bg-[var(--accent)] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                                        >
+                                            {editingDemo ? "Mettre à jour" : "Ajouter la démo"}
+                                        </button>
+                                        {editingDemo && (
+                                            <button 
+                                                type="button"
+                                                onClick={() => {
+                                                    setEditingDemo(null);
+                                                    setErrorMessage("");
+                                                }}
+                                                className="px-4 py-2 border border-white/20 rounded-lg font-semibold hover:bg-white/5 transition-colors"
+                                            >
+                                                Annuler
+                                            </button>
+                                        )}
+                                    </div>
+                                </form>
+                            </FormCard>
+
+                            <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                                <h2 className="text-xl font-semibold mb-4">Démos existantes ({demos.length})</h2>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left">
+                                        <thead>
+                                            <tr className="border-b border-white/10">
+                                                <th className="py-3 px-4">Nom</th>
+                                                <th className="py-3 px-4">Catégorie</th>
+                                                <th className="py-3 px-4">Date de création</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {demos.map((demo, idx) => (
+                                                <tr key={idx} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                                    <td className="py-3 px-4">{demo.name}</td>
+                                                    <td className="py-3 px-4">
+                                                        {categories.find(c => c.id.toString() === demo.category)?.label || demo.category}
+                                                    </td>
+                                                    <td className="py-3 px-4 text-sm text-zinc-400">{new Date(demo.created_at).toLocaleDateString()}</td>
+                                                    <td className="py-3 px-4 text-right">
+                                                        <div className="flex justify-end gap-2">
+                                                            <button 
+                                                                onClick={() => {
+                                                                    setEditingDemo(demo);
+                                                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                                }}
+                                                                className="p-2 text-zinc-400 hover:text-white transition-colors"
+                                                                title="Modifier"
+                                                            >
+                                                                <MdEdit size={18} />
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => handleDeleteDemo(demo.id)}
+                                                                className="p-2 text-zinc-400 hover:text-[var(--accent)] transition-colors"
+                                                                title="Supprimer"
+                                                            >
+                                                                <MdDelete size={18} />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            {errors.category && (
-                                <p className="mt-1 text-sm text-[var(--accent)]">
-                                    {errors.category}
-                                </p>
-                            )}
                         </div>
+                    )}
 
-                        <div>
-                            <label htmlFor="file" className="text-sm font-medium text-white">
-                                Téléchargement de fichier
-                            </label>
-                            <div className="relative mt-1">
-                                <input
-                                    id="file"
-                                    name="file"
-                                    type="file"
-                                    onChange={onFileChange}
-                                    className="w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[var(--accent)] file:text-white hover:file:bg-[var(--accent)]/90 cursor-pointer"
-                                />
+                    {activeTab === 'categories' && (
+                        <div className="space-y-8">
+                            <FormCard 
+                                title={editingCategory ? "Modifier la catégorie" : "Ajouter une nouvelle catégorie"} 
+                                subtitle={editingCategory ? "Modifier le nom de la catégorie existante" : "Créer une nouvelle catégorie pour classer les démos"}
+                                isLoading={isSubmittingCategory}
+                                isSuccess={!!categorySuccessMessage}
+                                successMessage={categorySuccessMessage}
+                            >
+                                <form onSubmit={editingCategory ? handleUpdateCategory : handleAddCategory} className="space-y-4">
+                                    <FormInput 
+                                        title="Nom de la catégorie" 
+                                        id="category_label" 
+                                        value={editingCategory ? editingCategory.label : newCategoryLabel} 
+                                        onChange={(e) => editingCategory ? setEditingCategory({...editingCategory, label: e.target.value}) : setNewCategoryLabel(e.target.value)}
+                                        placeholder="ex: Jazz, Rock, Événementiel"
+                                    />
+                                    <div className="flex gap-2">
+                                        <button 
+                                            type="submit"
+                                            disabled={isSubmittingCategory}
+                                            className="flex-1 bg-[var(--accent)] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                                        >
+                                            {editingCategory ? "Mettre à jour" : "Ajouter la catégorie"}
+                                        </button>
+                                        {editingCategory && (
+                                            <button 
+                                                type="button"
+                                                onClick={() => setEditingCategory(null)}
+                                                className="px-4 py-2 border border-white/20 rounded-lg font-semibold hover:bg-white/5 transition-colors"
+                                            >
+                                                Annuler
+                                            </button>
+                                        )}
+                                    </div>
+                                </form>
+                            </FormCard>
+
+                            <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                                <h2 className="text-xl font-semibold mb-4">Catégories existantes ({categories.length})</h2>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {categories.map((cat) => (
+                                        <div key={cat.id} className="p-3 bg-white/5 border border-white/10 rounded-lg flex justify-between items-center group">
+                                            <span>{cat.label}</span>
+                                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button 
+                                                    onClick={() => {
+                                                        setEditingCategory(cat);
+                                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                    }}
+                                                    className="p-1 text-zinc-400 hover:text-white transition-colors"
+                                                    title="Modifier"
+                                                >
+                                                    <MdEdit size={16} />
+                                                </button>
+                                                <button 
+                                                    onClick={() => handleDeleteCategory(cat.id)}
+                                                    className="p-1 text-zinc-400 hover:text-[var(--accent)] transition-colors"
+                                                    title="Supprimer"
+                                                >
+                                                    <MdDelete size={16} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                            {errors.file && (
-                                <p className="mt-1 text-sm text-[var(--accent)]">
-                                    {errors.file}
-                                </p>
-                            )}
                         </div>
+                    )}
+                </div>
+            </main>
 
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full rounded-lg bg-[var(--accent)] px-4 py-2 font-medium text-white transition-all hover:bg-[var(--accent)]/90 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            Soumettre
-                        </button>
-                    </form>
-                </FormCard>
-            </div>
+            <Footer />
         </div>
     );
 }
