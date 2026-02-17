@@ -7,7 +7,7 @@ export async function loadAllDemo() {
     const { data, error } = await supabase
         .from("demos")
         .select()
-        .order('created_at');
+        .order('created_at', { ascending: false });
 
     if (error || !data) {
         console.log("Unable to retrieve demo files: " + error);
@@ -22,7 +22,7 @@ export async function getLastDemo() {
     const { data, error } = await supabase
         .from('demos')
         .select('*')
-        .order('created_at', {  ascending: false })
+        .order('created_at', { ascending: false })
         .limit(1)
         .single();
 
