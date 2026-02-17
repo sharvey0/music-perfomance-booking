@@ -210,6 +210,10 @@ export default function Contact() {
                                     {error}
                                 </p>
                             )}
+
+                            <p className="text-center text-xs text-neutral-500">
+                                En soumettant ce formulaire, vous acceptez que vos données soient utilisées pour vous recontacter.
+                            </p>
                         </form>
                     </div>
                 </div>
