@@ -7,7 +7,7 @@ export function Footer() {
     return (
         <footer className="relative z-10 w-full bg-black border-t border-white/10 py-16 px-6 lg:px-12 text-white">
             <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-16">
                     <div className="md:col-span-2">
                         <Link href="/" className="inline-block mb-6">
                             <Image
@@ -37,6 +37,14 @@ export function Footer() {
                             <li><Link href="/demo" className="hover:text-[var(--accent)] transition-colors">Démos</Link></li>
                             <li><Link href="/#about-us" className="hover:text-[var(--accent)] transition-colors">À
                                 propos</Link></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-6">Documents légaux</h4>
+                        <ul className="space-y-4 text-sm text-zinc-400">
+                            <li><Link href="/politique-de-confidentialite" className="hover:text-[var(--accent)] transition-colors">Politique de confidentialité</Link>
+                            </li>
                         </ul>
                     </div>
 

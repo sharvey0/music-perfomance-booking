@@ -54,7 +54,8 @@ export async function proxy(request: NextRequest) {
         pathname.startsWith('/demo') ||
         pathname.startsWith('/contact') ||
         pathname.startsWith('/book') ||
-        pathname.startsWith('/api');
+        pathname.startsWith('/api') ||
+        pathname.startsWith('/politique-de-confidentialite');
 
     if (!user && !isAllowedWhenNotConnected) {
         const url = request.nextUrl.clone()
