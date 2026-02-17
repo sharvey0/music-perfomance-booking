@@ -3,6 +3,7 @@ import "./globals.css";
 import {ReactNode} from "react";
 import {SpeedInsights} from "@vercel/speed-insights/next";
 import {Analytics} from "@vercel/analytics/next";
+import CookieBanner from "@/components/CookieBanner";
 
 export const metadata: Metadata = {
     title: "Productions Beaulieu",
@@ -24,6 +25,7 @@ export default function RootLayout({
         </head>
         <body className="antialiased">
         {children}
+        <CookieBanner/>
         </body>
         </html>
     );

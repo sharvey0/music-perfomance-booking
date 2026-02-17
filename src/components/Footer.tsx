@@ -49,6 +49,9 @@ export function Footer() {
                             <li>
                                 <Link href="/conditions-dutilisation" className="hover:text-[var(--accent)] transition-colors">Conditions d&#39;utilisation</Link>
                             </li>
+                            <li>
+                                <Link href="/politique-de-cookies" className="hover:text-[var(--accent)] transition-colors">Politique de cookies</Link>
+                            </li>
                         </ul>
                     </div>
 

@@ -56,7 +56,8 @@ export async function proxy(request: NextRequest) {
         pathname.startsWith('/book') ||
         pathname.startsWith('/api') ||
         pathname.startsWith('/politique-de-confidentialite') ||
-        pathname.startsWith('/conditions-dutilisation');
+        pathname.startsWith('/conditions-dutilisation') ||
+        pathname.startsWith('/politique-de-cookies');
 
     if (!user && !isAllowedWhenNotConnected) {
         const url = request.nextUrl.clone()
