@@ -1,4 +1,5 @@
-# 🎵 Productions Beaulieu – Website & Booking Platform
+# Productions Beaulieu – Website & Booking Platform
+![logo](/public/logo/prod_beaulieu_logo.png)
 
 Official website and booking request platform for Productions Beaulieu, a musical performance service based in Québec, Canada.
 
@@ -6,7 +7,7 @@ This project is a modern full-stack web application built with scalability, secu
 
 ---
 
-## 🚀 Features
+## Features
 
 - Event booking request form
 - Authentication system
@@ -24,7 +25,7 @@ This project is a modern full-stack web application built with scalability, secu
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - [Next.js](https://nextjs.org/) (App Router)
@@ -45,7 +46,7 @@ This project is a modern full-stack web application built with scalability, secu
 
 ---
 
-## ✉️ Email Workflow
+## Email Workflow
 
 When a booking form is submitted:
 A notification email is sent to Productions Beaulieu.
@@ -53,35 +54,102 @@ Emails are handled server-side using the Resend API with secured environment var
 
 ---
 
-## 📦 Project Structure
+## Project Structure
 
 ```
+src/
 ├── app/
 │   ├── layout.jsx
 │   ├── page.jsx
+│   ├── (auth)/
+│   │   ├── account/
+│   │   │   ├── delete-my-account/
+│   │   │   │   └── page.tsx
+│   │   │   ├── update-email/
+│   │   │   │   └── page.tsx
+│   │   │   └── update-password/
+│   │   │       ├── clear-flag/
+│   │   │       │   └── route.ts
+│   │   │       └── page.tsx
+│   │   ├── auth/
+│   │   │   ├── auth-code-error/
+│   │   │   │   └── page.tsx
+│   │   │   └── confirm/
+│   │   │       └── route.ts
+│   │   ├── login/
+│   │   │   └── page.tsx
+│   │   ├── logout/
+│   │   │   └── route.ts
+│   │   ├── register/
+│   │   │   └── page.tsx
+│   │   └── reset-password/
+│   │       └── page.tsx
+│   ├── (legals)/
+│   │   ├── conditions-dutilisation/
+│   │   │   └── page.tsx
+│   │   ├── politique-de-confidentialite/
+│   │   │   └── page.tsx
+│   │   └── politique-de-cookies/
+│   │       └── page.tsx
+│   ├── account/
+│   │   └── page.tsx
 │   ├── api/
-│   │   └── booking/
-│   │       └── route.js
-│   ├── politique-de-confidentialite/
-│   ├── conditions-dutilisation/
-│   └── politique-de-cookies/
+│   │   ├── delete-account/
+│   │   │   └── route.ts
+│   │   ├── send-booking-info/
+│   │   │   └── route.ts
+│   │   └── send-question-info/
+│   │       └── route.ts
+│   ├── book/
+│   │   └── page.tsx
+│   ├── contact/
+│   │   └── page.tsx
+│   ├── dashboard/
+│   │   └── page.tsx
+│   └── demo/
+│       └── page.tsx
 ├── components/
-│   └── form/
-│   │       └── FormCard.tsx
-│   │       └── FormInput.tsx
-│   └── AboutUs.tsx
-│   └── CookieBanner.jsx
-│   └── Footer.tsx
-│   └── Header.tsx
+│   ├── form/
+│   │   ├── FormCard.tsx
+│   │   └── FormInput.tsx
+│   ├── AboutUs.tsx
+│   ├── CookieBanner.jsx
+│   ├── Footer.tsx
+│   ├── Header.tsx
 │   └── HeroSection.tsx
-└── lib/
-    ├── supabase.js
-    └── resend.js
+├── database/
+│   ├── CategoryDAO.ts
+│   └── DemoDAO.ts
+├── enums/
+│   ├── supabase/
+│   │   └── SupabaseErrorMessage.ts
+│   └── BookingType.ts
+├── lib/
+│   ├── resend/
+│   │   ├── client.ts
+│   │   ├── sanitize.ts
+│   │   └── simpleRatelimit.ts
+│   └── supabase/
+│       ├── admin.ts
+│       ├── client.ts
+│       ├── server.ts
+│       ├── storage.ts
+│       └── utils.ts
+├── types/
+│   ├── components/
+│   │   ├── HeaderProps.ts
+│   │   └── HeroProps.ts
+│   ├── form/
+│   │   ├── FormCardProps.ts
+│   │   └── FormInputProps.ts
+│   ├── Category.ts
+│   └── Demo.ts
+└── proxy.ts
 ```
 
 ---
 
-## 🔐 Privacy & Legal Compliance
+## Privacy & Legal Compliance
 
 This project includes:
 
@@ -94,7 +162,7 @@ No payment processing is currently integrated.
 
 ---
 
-## 🧩 Environment Variables
+## Environment Variables
 
 Create a `.env.local` file at the root of the project:
 
@@ -106,11 +174,11 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_key
 NEXT_PUBLIC_RESEND_API_KEY=your_resend_key
 ```
 
-> ⚠️ Never commit this file to version control.
+> Never commit this file to version control.
 
 ---
 
-## 🖥️ Local Development
+## Local Development
 
 Install dependencies:
 
@@ -128,7 +196,7 @@ The app runs at [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
 The project is optimized for deployment on Vercel.
 
@@ -138,7 +206,7 @@ The project is optimized for deployment on Vercel.
 
 ---
 
-## 🔒 Security Considerations
+## Security Considerations
 
 - HTTPS enforced in production
 - Environment variables stored securely server-side
@@ -148,7 +216,7 @@ The project is optimized for deployment on Vercel.
 
 ---
 
-## 📌 Future Improvements
+## Future Improvements
 
 - Stripe payment integration
 - Booking management system
@@ -156,12 +224,12 @@ The project is optimized for deployment on Vercel.
   
 ---
 
-## 👤 Authors
+## Authors
 
 Made with passion by [Samuel Harvey](https://github.com/sharvey0) and [Édouard Dupont](https://github.com/edupont16).
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [AGPL-3.0 License](./LICENSE).
